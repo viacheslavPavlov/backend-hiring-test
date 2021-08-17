@@ -2,7 +2,9 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true,
+        "mocha": true
     },
     "extends": [
         "airbnb-base"
@@ -15,5 +17,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "new-cap": "off",
+        "consistent-return": "warn"
     }
 }
