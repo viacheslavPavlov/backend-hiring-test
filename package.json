@@ -8,10 +8,15 @@
   },
   "scripts": {
     "test": "mocha tests",
-    "start": "node index.js"
+    "start": "node index.js",
+    "coverage": "nyc npm run test",
+    "eslint": "eslint . --ext .js,.ts"
   },
   "keywords": [
     "Xendit"
+  ],
+  "prepush": [
+    "test"
   ],
   "author": "v.pavlov",
   "license": "ISC",
@@ -21,7 +26,16 @@
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.0",
     "mocha": "^6.1.4",
-    "supertest": "^4.0.2"
+    "nyc": "^15.1.0",
+    "pre-push": "^0.1.1",
+    "supertest": "^4.0.2",
+    "typescript": "^4.3.5",
+    "winston": "^3.3.3"
   }
 }
