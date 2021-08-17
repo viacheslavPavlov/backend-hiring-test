@@ -36,17 +36,16 @@ interface Ride {
   ```
 - Success response (status `200`):
   ```json
-    {
+      {
       "rideID": 1,
-      "start_lat": 40, 
-      "start_long": 50,
-      "end_lat": 40, 
-      "end_long": 50,
-      "rider_name": "John rider",
-      "driver_name": "Michel Knight",
-      "driver_vehicle": "Ford GT550",
-      "created": "Ford GT550"
-     }
+      "startLat": 40,
+      "startLong": 50,
+      "endLat": 40,
+      "endLong": 50,
+      "riderName": "John rider",
+      "driverName": "Michel Knight",
+      "driverVehicle": "Ford GT550"
+    }
   ```
 
 - Validation error response (status `200`):
@@ -72,26 +71,24 @@ interface Ride {
   [
     {
       "rideID": 1,
-      "start_lat": 40, 
-      "start_long": 50,
-      "end_lat": 0, 
-      "end_long": 0,
-      "rider_name": "John rider",
-      "driver_name": "Michel Knight",
-      "driver_vehicle": "Ford GT550",
-      "created": "Ford GT550"
-     },
+      "startLat": 40,
+      "startLong": 50,
+      "endLat": 40,
+      "endLong": 50,
+      "riderName": "John rider",
+      "driverName": "Michel Knight",
+      "driverVehicle": "Ford GT550"
+    },
     {
       "rideID": 2,
-      "start_lat": 0, 
-      "start_long": 0,
-      "end_lat": 40, 
-      "end_long": 50,
-      "rider_name": "Sam stone",
-      "driver_name": "Michel Knight",
-      "driver_vehicle": "Ford GT550",
-      "created": "Ford GT550"
-     }
+      "startLat": 40,
+      "startLong": 50,
+      "endLat": 40,
+      "endLong": 50,
+      "riderName": "John rider",
+      "driverName": "Michel Knight",
+      "driverVehicle": "Ford GT550"
+    }
   ]
   ```
 
@@ -111,14 +108,13 @@ interface Ride {
   ```json
     {
       "rideID": 1,
-      "start_lat": 40,
-      "start_long": 50,
-      "end_lat": 0,
-      "end_long": 0,
-      "rider_name": "John rider",
-      "driver_name": "Michel Knight",
-      "driver_vehicle": "Ford GT550",
-      "created": "Ford GT550"
+      "startLat": 40,
+      "startLong": 50,
+      "endLat": 40,
+      "endLong": 50,
+      "riderName": "John rider",
+      "driverName": "Michel Knight",
+      "driverVehicle": "Ford GT550"
     }
   ```
 
