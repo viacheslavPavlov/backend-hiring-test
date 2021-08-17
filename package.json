@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha tests",
     "start": "node index.js",
-    "coverage": "nyc npm run test",
+    "coverage": "nyc --check-coverage=true --lines=80 npm run test",
     "eslint": "eslint . --ext .js,.ts",
     "eslint:fix": "eslint . --fix --ext .js,.ts"
   },
@@ -18,7 +18,8 @@
   ],
   "prepush": [
     "test",
-    "eslint"
+    "eslint",
+    "coverage"
   ],
   "author": "v.pavlov",
   "license": "ISC",
@@ -31,6 +32,8 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
+    "assert": "^2.0.0",
+    "chai": "^4.3.4",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.24.0",

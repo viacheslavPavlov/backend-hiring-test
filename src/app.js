@@ -7,7 +7,7 @@ const jsonParser = bodyParser.json();
 const server = (db) => {
   app.get('/health', (req, res) => res.send('Healthy'));
 
-  app.post('/rides', jsonParser, (req, res, next) => {
+  app.post('/rides', jsonParser, (req, res) => {
     const startLatitude = Number(req.body.start_lat);
     const startLongitude = Number(req.body.start_long);
     const endLatitude = Number(req.body.end_lat);
@@ -20,7 +20,7 @@ const server = (db) => {
       startLatitude < -90 || startLatitude > 90
       || startLongitude < -180 || startLongitude > 180
     ) {
-      return res.send({
+      return res.json({
         error_code: 'VALIDATION_ERROR',
         message: 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively',
       });
@@ -79,10 +79,8 @@ const server = (db) => {
             message: 'Unknown error',
           });
         }
-
-        res.send(rows);
+        res.json(JSON.stringify(rows[0]));
       });
-      return next();
     });
   });
 
@@ -102,7 +100,7 @@ const server = (db) => {
         });
       }
 
-      res.send(rows);
+      res.json(JSON.stringify(rows));
     });
   });
 
@@ -122,7 +120,7 @@ const server = (db) => {
         });
       }
 
-      res.send(rows);
+      res.json(JSON.stringify(rows[0]));
     });
   });
 
