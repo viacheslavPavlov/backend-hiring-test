@@ -1,6 +1,6 @@
-import supertest from 'supertest';
-import sqlite3 from 'sqlite3';
-import app from '../src/app';
+const supertest = require('supertest');
+const sqlite3 = require('sqlite3');
+const app = require('../src/app');
 
 const db = new sqlite3.Database(':memory:');
 const buildSchemas = require('../src/schemas');

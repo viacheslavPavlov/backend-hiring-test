@@ -1,17 +1,16 @@
-import sqlite3 from 'sqlite3';
+const sqlite3 = require('sqlite3').verbose();
 
-import app from './src/app';
+const db = new sqlite3.Database(':memory:');
 
-import logger from './src/util/logger';
+const app = require('./src/app');
+const logger = require('./src/util/logger');
 
 const port = 8010;
 
-const DB = new sqlite3.verbose().Database(':memory:');
-
 const buildSchemas = require('./src/schemas');
 
-DB.serialize(() => {
-  buildSchemas(DB);
+db.serialize(() => {
+  buildSchemas(db);
 
-  app.listen(port, () => logger.info(`App started and listening on port ${port}`));
+  app(db).listen(port, () => logger.info(`App started and listening on port ${port}`));
 });

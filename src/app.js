@@ -1,5 +1,5 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+const express = require('express');
+const bodyParser = require('body-parser');
 
 const app = express();
 const jsonParser = bodyParser.json();
@@ -129,4 +129,4 @@ const server = (db) => {
   return app;
 };
 
-export default server;
+module.exports = server;
