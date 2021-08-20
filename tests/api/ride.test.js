@@ -14,6 +14,16 @@ const NEW_RIDE_JSON = {
   driver_vehicle: 'Ford GT550',
 };
 
+const SQL_INJECTION_JSON = {
+  start_lat: 40,
+  start_long: 50,
+  end_lat: 40,
+  end_long: 50,
+  rider_name: 'DROP TABLE IF EXISTS Rides',
+  driver_name: 'DROP TABLE IF EXISTS Rides',
+  driver_vehicle: 'DROP TABLE IF EXISTS Rides',
+};
+
 const FAIL_RIDE_JSON = {
   start_lat: 140,
   start_long: 250,
@@ -64,6 +74,17 @@ describe('Ride API tests', () => {
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect((res) => {
           assert.include(res.body, { ...VALIDATION_ERROR });
+        })
+        .expect(200, done);
+    });
+
+    it('should be not vulnerable to sql injections', (done) => {
+      supertest(server)
+        .post('/rides')
+        .send({ ...SQL_INJECTION_JSON })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect((res) => {
+          assert.include(res.body, { rideID: 1 });
         })
         .expect(200, done);
     });
