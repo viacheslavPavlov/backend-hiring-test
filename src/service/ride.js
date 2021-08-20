@@ -35,11 +35,11 @@ const ridesService = (db) => {
   const getOne = async (id) => {
     try {
       logger.info(`Fetching ride with id: ${id}`);
-      const res = await db.all(`SELECT * FROM Rides WHERE rideID='${id}'`);
+      const res = await db.all('SELECT * FROM Rides WHERE rideID=?', [+id]);
       logger.info(`Fetched ride: ${JSON.stringify(res)}`);
 
       if (res.length === 0) {
-        logger.warn(`RIDES_NOT_FOUND_ERROR while fetching ride with id ${id}`);
+        logger.error(`RIDES_NOT_FOUND_ERROR while fetching ride with id ${id}`);
         return {
           error_code: 'RIDES_NOT_FOUND_ERROR',
           message: 'Could not find any rides',
@@ -48,7 +48,7 @@ const ridesService = (db) => {
       logger.info(`Fetched from db: ${JSON.stringify(res[0])}`);
       return res[0];
     } catch (err) {
-      logger.warn(`Server error while fetching ride with id ${id}, \n Err: ${err}`);
+      logger.error(`Server error while fetching ride with id ${id}, \n Err: ${err}`);
       return {
         error_code: 'SERVER_ERROR',
         message: err,
@@ -57,9 +57,15 @@ const ridesService = (db) => {
   };
 
   const insert = async (values) => {
-    const res = await db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values);
+    try {
+      logger.info(`Inserting new ride: ${values}`);
+      const res = await db.run('INSERT INTO Rides(startLat, startLong, endLat, endLong, riderName, driverName, driverVehicle) VALUES (?, ?, ?, ?, ?, ?, ?)', values);
 
-    return res.lastID;
+      return res.lastID;
+    } catch (e) {
+      logger.error(`Error while inserting ride: ${e}`);
+      throw e;
+    }
   };
 
   return {
