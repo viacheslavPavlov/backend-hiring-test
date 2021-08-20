@@ -1,10 +1,8 @@
 const supertest = require('supertest');
 const { assert } = require('chai');
-const sqlite3 = require('sqlite3');
 const app = require('../src/app');
 
-const db = new sqlite3.Database(':memory:');
-const buildSchemas = require('../src/schemas');
+let server;
 
 const NEW_RIDE_JSON = {
   start_lat: 40,
@@ -43,30 +41,13 @@ const NEW_RIDE_RES = {
 };
 
 describe('API tests', () => {
-  beforeEach((done) => {
-    db.serialize((err) => {
-      if (err) {
-        return done(err);
-      }
-
-      buildSchemas(db);
-
-      return done();
-    });
+  beforeEach(async () => {
+    server = await app();
   });
 
-  afterEach((done) => {
-    db.run('DROP TABLE IF EXISTS rides', (err) => {
-      if (err) {
-        return done(err);
-      }
-      return done();
-    });
-  });
-
-  describe('GET /health', () => {
+  describe('GET /health', async () => {
     it('should return health', (done) => {
-      supertest(app(db))
+      supertest(server)
         .get('/health')
         .expect('Content-Type', /text/)
         .expect(200, done);
@@ -75,18 +56,18 @@ describe('API tests', () => {
 
   describe('GET /rides', () => {
     it('should return new created ride', (done) => {
-      supertest(app(db))
+      supertest(server)
         .post('/rides')
         .send({ ...NEW_RIDE_JSON })
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect((res) => {
-          assert.include(JSON.parse(res.body), { ...NEW_RIDE_RES });
+          assert.include(res.body, { ...NEW_RIDE_RES });
         })
         .expect(200, done);
     });
   });
   it('should return validation error', (done) => {
-    supertest(app(db))
+    supertest(server)
       .post('/rides')
       .send({ ...FAIL_RIDE_JSON })
       .expect('Content-Type', 'application/json; charset=utf-8')
@@ -97,13 +78,12 @@ describe('API tests', () => {
   });
 
   it('should return ride that was already in db', (done) => {
-    const server = app(db);
     supertest(server)
       .post('/rides')
       .send({ ...NEW_RIDE_JSON })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect((res) => {
-        assert.include(JSON.parse(res.body), { ...NEW_RIDE_RES });
+        assert.include(res.body, { ...NEW_RIDE_RES });
       })
       .expect(200)
       .end(() => {
@@ -111,19 +91,18 @@ describe('API tests', () => {
           .get('/rides')
           .expect('Content-Type', 'application/json; charset=utf-8')
           .expect((res) => {
-            assert.include(JSON.parse(res.body)[0], { ...NEW_RIDE_RES });
+            assert.include(res.body[0], { ...NEW_RIDE_RES });
           })
           .expect(200, done);
       });
   });
   it('should return ride by id', (done) => {
-    const server = app(db);
     supertest(server)
       .post('/rides')
       .send({ ...NEW_RIDE_JSON })
       .expect('Content-Type', 'application/json; charset=utf-8')
       .expect((res) => {
-        assert.include(JSON.parse(res.body), { ...NEW_RIDE_RES });
+        assert.include(res.body, { ...NEW_RIDE_RES });
       })
       .expect(200)
       .end(() => {
@@ -131,7 +110,7 @@ describe('API tests', () => {
           .get('/rides/1')
           .expect('Content-Type', 'application/json; charset=utf-8')
           .expect((res) => {
-            assert.include(JSON.parse(res.body), { ...NEW_RIDE_RES });
+            assert.include(res.body, { ...NEW_RIDE_RES });
           })
           .expect(200, done);
       });
