@@ -126,3 +126,37 @@ interface Ride {
       "message": "Unknown error"
    }
   ```
+
+4. `GET`: `/rides/p/:page?size=:size` to fetch page of rides
+
+- Success response (status `200`):
+  ```json
+    {
+    "content": [
+      {
+        "rideID": 1,
+        "startLat": 40,
+        "startLong": 50,
+        "endLat": 40,
+        "endLong": 50,
+        "riderName": "John rider",
+        "driverName": "Michel Knight",
+        "driverVehicle": "Ford GT550",
+        "created": "2021-08-20 10:07:40"
+      }
+    ],
+    "page": 1,
+    "size": 20,
+    "total": 1
+  }
+
+  ```
+
+
+- Server error response (status `500`):
+  ```json
+   {
+      "error_code": "SERVER_ERROR",
+      "message": "Unknown error"
+   }
+  ```

@@ -9,6 +9,29 @@ const ridesService = (db) => {
     return res;
   };
 
+  const getPage = async (page = 0, size = 20) => {
+    try {
+      logger.info(`Fetching rides ${page} page, size: ${size}`);
+      const content = await db.all('SELECT * FROM Rides limit ? offset ?', [size, (page - 1) * size]);
+      const amount = await db.get('SELECT count(*) FROM Rides', []);
+
+      const total = Math.ceil(Object.values(amount)[0] / size);
+
+      const paged = {
+        content,
+        page,
+        size,
+        total,
+      };
+
+      logger.info(`Fetched rides' page: ${JSON.stringify(paged)}`);
+      return paged;
+    } catch (e) {
+      logger.error(`Fetching ride page (p: ${page}, s: ${size}) error: ${e}`);
+      throw new Error(e);
+    }
+  };
+
   const getOne = async (id) => {
     try {
       logger.info(`Fetching ride with id: ${id}`);
@@ -41,6 +64,7 @@ const ridesService = (db) => {
 
   return {
     getOne,
+    getPage,
     getAll,
     insert,
   };

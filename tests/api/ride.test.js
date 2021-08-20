@@ -91,6 +91,31 @@ describe('Ride API tests', () => {
     });
   });
 
+  describe('GET /rides/p/:p', () => {
+    it('Should return page of rides', (done) => {
+      supertest(server)
+        .post('/rides')
+        .send({ ...NEW_RIDE_JSON })
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect((res) => {
+          assert.include(res.body, { ...NEW_RIDE_RES });
+        })
+        .expect(200)
+        .end(() => {
+          supertest(server)
+            .get('/rides/p/1?size=20')
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .expect((res) => {
+              assert.include(res.body.content[0], { ...NEW_RIDE_RES });
+              assert.equal(res.body.page, 1);
+              assert.equal(res.body.size, 20);
+              assert.equal(res.body.total, 1);
+            })
+            .expect(200, done);
+        });
+    });
+  });
+
   describe('GET /ride/:id', () => {
     it('should return ride by id', (done) => {
       supertest(server)

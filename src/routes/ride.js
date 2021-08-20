@@ -79,6 +79,18 @@ const riderRoutes = (db) => {
     res.send(rows);
   });
 
+  router.get('/rides/p/:page', async (req, res) => {
+    const { page } = req.params;
+    const { size } = req.query;
+    try {
+      const paged = await service.getPage(+page, +size);
+      res.send(paged);
+    } catch (e) {
+      logger.error(`Error while fetching rides' page: ${e}`);
+      res.status(500).send(e);
+    }
+  });
+
   router.get('/rides/:id', async (req, res) => {
     try {
       const ride = await service.getOne(req.params.id);
