@@ -3,4 +3,7 @@ const logger = require('./src/util/logger');
 
 const port = 8010;
 
-app().listen(port, () => logger.info(`App started and listening on port ${port}`));
+(async () => {
+  const server = await app();
+  server.listen(port, () => logger.info(`App started and listening on port ${port}`));
+})();
