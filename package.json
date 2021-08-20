@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "test": "mocha tests --recursive",
     "start": "node index.js",
     "coverage": "nyc --check-coverage=true --lines=80 npm run test",
     "eslint": "eslint . --ext .js,.ts",
