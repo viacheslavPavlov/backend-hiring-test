@@ -1,6 +1,10 @@
-module.exports = (db) => {
+module.exports = async (db) => {
+  const removeSchemas = 'DROP TABLE IF EXISTS Rides';
+
+  await db.run(removeSchemas);
+
   const createRideTableSchema = `
-        CREATE TABLE Rides
+        CREATE TABLE IF NOT EXISTS Rides
         (
         rideID INTEGER PRIMARY KEY AUTOINCREMENT,
         startLat DECIMAL NOT NULL,
@@ -14,7 +18,7 @@ module.exports = (db) => {
         )
     `;
 
-  db.run(createRideTableSchema);
+  await db.run(createRideTableSchema);
 
   return db;
 };
